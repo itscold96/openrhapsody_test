@@ -1,33 +1,14 @@
-import { useEffect, useState } from 'react';
-import { getAdvertisement } from '../../fetches/getAdvertisement';
+import { useAdvertisement } from '../../queries/useAdvertisement';
 
 interface AdvertisementProps {
   unitId: string;
 }
 
 export default function Advertisement({ unitId }: AdvertisementProps) {
-  const [adHTML, setAdHTML] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { data, error } = useAdvertisement(unitId);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { msg, result } = await getAdvertisement(unitId);
-        if (result) {
-          setAdHTML(result.ad);
-        } else {
-          // unitId가 잘못되었을 경우, 200 ok임에도 result가 null 값으로 반환됨.
-          setError(msg);
-        }
-      } catch (error) {
-        setError(error instanceof Error ? error.message : '알 수 없는 오류 발생');
-      }
-    };
+  if (error) return <div>{error.message}</div>;
+  if (!data.result) return <div>{data.msg}</div>;
 
-    init();
-  }, [unitId]);
-
-  if (error) return <div>{error}</div>;
-
-  return <div dangerouslySetInnerHTML={{ __html: adHTML ?? '' }} />;
+  return <div dangerouslySetInnerHTML={{ __html: data.result.ad ?? '' }} />;
 }
