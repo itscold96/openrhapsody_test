@@ -7,7 +7,6 @@ interface AdvertisementProps {
 
 export default function Advertisement({ unitId }: AdvertisementProps) {
   const [adHTML, setAdHTML] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,15 +21,12 @@ export default function Advertisement({ unitId }: AdvertisementProps) {
         }
       } catch (error) {
         setError(error instanceof Error ? error.message : '알 수 없는 오류 발생');
-      } finally {
-        setIsLoading(false);
       }
     };
 
     init();
   }, [unitId]);
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return <div dangerouslySetInnerHTML={{ __html: adHTML ?? '' }} />;
