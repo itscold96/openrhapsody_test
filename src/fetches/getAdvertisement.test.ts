@@ -17,7 +17,9 @@ describe('광고 받아오기 함수 테스트', () => {
     const data = await getAdvertisement(testUnitId);
 
     expect(spyGet).toHaveBeenCalledTimes(1);
-    expect(spyGet).toHaveBeenCalledWith(`/request?unit=${testUnitId}&pf=web&lcl=ko_KR`);
+    expect(spyGet).toHaveBeenCalledWith('/request', {
+      params: { lcl: 'ko_KR', pf: 'web', unit: testUnitId },
+    });
     expect(data).toHaveProperty('result', expectedResult);
   });
 
