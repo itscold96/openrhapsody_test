@@ -1,11 +1,11 @@
-import { useAdvertisement } from '../../queries/useAdvertisement';
+import { useAdvertisementQuery } from '../../queries/suspenseQueries/useAdvertisementQuery';
 
 interface AdvertisementProps {
   unitId: string;
 }
 
 export default function Advertisement({ unitId }: AdvertisementProps) {
-  const { data, error } = useAdvertisement(unitId);
+  const { data, error } = useAdvertisementQuery(unitId);
 
   if (error) return <div>{error.message}</div>;
   if (!data.result) return <div>{data.msg}</div>;
